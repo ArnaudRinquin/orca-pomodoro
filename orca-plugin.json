@@ -1,0 +1,136 @@
+{
+  "manifestVersion": 2,
+  "id": "pomodoro",
+  "name": "Pomodoro",
+  "version": "0.1.0",
+  "description": "A pomodoro timer in the status bar: click to start or pause, reset in one click, with a sound and a notification when a phase ends.",
+  "engines": {
+    "orca": ">=1.4.248"
+  },
+  "execution": "trusted-worker",
+  "pluginApi": 1,
+  "main": "src/worker.ts",
+  "capabilities": [
+    {
+      "kind": "notifications:show"
+    },
+    {
+      "kind": "storage:own"
+    },
+    {
+      "kind": "settings:own"
+    }
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "id": "pomodoro.toggle",
+        "title": "Pomodoro: Start / Pause"
+      },
+      {
+        "id": "pomodoro.skip",
+        "title": "Pomodoro: Skip to next phase"
+      },
+      {
+        "id": "pomodoro.reset",
+        "title": "Pomodoro: Reset"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "pomodoro.toggle",
+        "key": "Mod+Alt+P"
+      }
+    ],
+    "statusBarItems": [
+      {
+        "id": "timer",
+        "text": "25:00",
+        "icon": "play",
+        "tooltip": "Pomodoro: click to start",
+        "command": "pomodoro.toggle"
+      },
+      {
+        "id": "reset",
+        "icon": "refresh",
+        "tooltip": "Pomodoro: reset",
+        "command": "pomodoro.reset"
+      }
+    ],
+    "settings": [
+      {
+        "key": "workMinutes",
+        "title": "Focus minutes",
+        "type": "integer",
+        "default": 25,
+        "minimum": 1,
+        "maximum": 180
+      },
+      {
+        "key": "breakMinutes",
+        "title": "Short break minutes",
+        "type": "integer",
+        "default": 5,
+        "minimum": 1,
+        "maximum": 60
+      },
+      {
+        "key": "longBreakMinutes",
+        "title": "Long break minutes",
+        "type": "integer",
+        "default": 15,
+        "minimum": 1,
+        "maximum": 120
+      },
+      {
+        "key": "longBreakEvery",
+        "title": "Long break every N focus sessions",
+        "type": "integer",
+        "default": 4,
+        "minimum": 1,
+        "maximum": 12
+      },
+      {
+        "key": "autoStart",
+        "title": "Start the next phase automatically",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "sound",
+        "title": "Play a sound when a phase ends",
+        "description": "macOS: system sound via afplay. Linux: paplay. Windows: system beep.",
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "key": "soundName",
+        "title": "Sound (macOS)",
+        "type": "string",
+        "default": "Glass",
+        "enum": [
+          "Glass",
+          "Ping",
+          "Hero",
+          "Submarine",
+          "Funk",
+          "Blow",
+          "Bottle",
+          "Frog",
+          "Pop",
+          "Purr",
+          "Basso",
+          "Morse",
+          "Sosumi",
+          "Tink"
+        ]
+      }
+    ]
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Arnaud Rinquin",
+    "url": "https://github.com/ArnaudRinquin"
+  },
+  "repository": "https://github.com/ArnaudRinquin/orca-pomodoro"
+}
