@@ -2,6 +2,10 @@
 
 A pomodoro timer in Orca's status bar.
 
+| Idle | Focus | Break |
+| --- | --- | --- |
+| ![Idle timer](docs/idle.png) | ![Focus session running](docs/focus.png) | ![Break running](docs/break.png) |
+
 - Click the timer (or `Cmd/Ctrl+Alt+P`) to start or pause; the ↻ button next to it resets.
 - Focus 25 min → break 5 min, with a 15 min long break every 4 focus sessions.
 - When a phase ends: a sound and a desktop notification. The next phase waits for a click unless "Start the next phase automatically" is on.
