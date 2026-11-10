@@ -2,7 +2,7 @@
 
 How this plugin was built, step by step, so you (or an agent) can make a similar one: a background
 worker that keeps a status bar item up to date, plus commands, settings, notifications and a sound.
-Written against Orca 1.4.251.
+Written against Orca 1.4.251, checked again on 1.4.255.
 
 ## Ingredients
 
@@ -50,14 +50,17 @@ while it stays enabled, so a `setInterval` in `activate` is enough to drive the 
 
 ## Gotchas met along the way
 
-- In Orca 1.4.251, `orca plugin create` stops partway with
-  `ENOENT … plugins/declarative/orca.d.ts`. The files are written, but `.orca/types` (which
-  `tsconfig.json` extends) is missing, so `tsc` can't type-check the plugin.
-- `orca plugin shot` writes to `.orca/shots/` inside the plugin folder when run from there. In
-  1.4.251 that breaks the worker: approval skips `.orca/`, as the docs say, but the check at
-  worker start counts it, so the worker keeps failing with `content hash mismatch` and no new
-  approval clears it. Run `shot` from outside the folder or pass `--out` to a path outside it, and
-  delete `.orca/shots/` if it is already there.
+- In Orca 1.4.251, `orca plugin create` stopped partway with
+  `ENOENT … plugins/declarative/orca.d.ts` and wrote no `.orca/types`. Fixed in 1.4.255:
+  `orca plugin types .` works, and `tsc -p .` type-checks the plugin. Orca's types don't cover
+  Node built-ins, so `src/node.d.ts` declares the two used here (`execFile`, `process.platform`)
+  instead of pulling in `@types/node`.
+- Anything in `.orca/` stops a development plugin's worker (still true in 1.4.255): approval
+  skips `.orca/`, as the docs say, but the check at worker start counts it, so the worker keeps
+  failing with `content hash mismatch` and no new approval clears it. Both `orca plugin types`
+  (`.orca/types`) and `orca plugin shot` run inside the folder (`.orca/shots`) write there.
+  Type-check, then `rm -rf .orca` before loading or enabling; pass `shot` an `--out` path outside
+  the folder.
 - Every other file added to the folder (screenshots, docs) changes the content hash and asks
   for approval again. Generate assets outside the folder and copy them in once.
 - `notifications.show` only takes `title` and `body`; there is no sound option, hence the
