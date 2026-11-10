@@ -53,7 +53,12 @@ while it stays enabled, so a `setInterval` in `activate` is enough to drive the 
 - In Orca 1.4.251, `orca plugin create` stops partway with
   `ENOENT … plugins/declarative/orca.d.ts`. The files are written, but `.orca/types` (which
   `tsconfig.json` extends) is missing, so `tsc` can't type-check the plugin.
-- `orca plugin shot` writes to `.orca/shots/` in the current directory. Run it from the plugin
-  folder.
+- `orca plugin shot` writes to `.orca/shots/` inside the plugin folder when run from there. In
+  1.4.251 that breaks the worker: approval skips `.orca/`, as the docs say, but the check at
+  worker start counts it, so the worker keeps failing with `content hash mismatch` and no new
+  approval clears it. Run `shot` from outside the folder or pass `--out` to a path outside it, and
+  delete `.orca/shots/` if it is already there.
+- Every other file added to the folder (screenshots, docs) changes the content hash and asks
+  for approval again. Generate assets outside the folder and copy them in once.
 - `notifications.show` only takes `title` and `body`; there is no sound option, hence the
   `child_process` sound.
