@@ -2,7 +2,7 @@
   "manifestVersion": 2,
   "id": "pomodoro",
   "name": "Pomodoro",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A pomodoro timer in the status bar: click to start or pause, reset in one click, with a sound and a notification when a phase ends.",
   "engines": {
     "orca": ">=1.4.248"
