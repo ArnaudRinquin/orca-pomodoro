@@ -2,7 +2,7 @@
 
 How this plugin was built, step by step, so you (or an agent) can make a similar one: a background
 worker that keeps a status bar item up to date, plus commands, settings, notifications and a sound.
-Written against Orca 1.4.251, checked again on 1.4.255.
+Written against Orca 1.4.255.
 
 ## Ingredients
 
@@ -50,12 +50,9 @@ while it stays enabled, so a `setInterval` in `activate` is enough to drive the 
 
 ## Gotchas met along the way
 
-- In Orca 1.4.251, `orca plugin create` stopped partway with
-  `ENOENT … plugins/declarative/orca.d.ts` and wrote no `.orca/types`. Fixed in 1.4.255:
-  `orca plugin types .` works, and `tsc -p .` type-checks the plugin. Orca's types don't cover
-  Node built-ins, so `src/node.d.ts` declares the two used here (`execFile`, `process.platform`)
-  instead of pulling in `@types/node`.
-- Anything in `.orca/` stops a development plugin's worker (still true in 1.4.255): approval
+- Orca's types don't cover Node built-ins, so `src/node.d.ts` declares the two used here
+  (`execFile`, `process.platform`) instead of pulling in `@types/node`.
+- Anything in `.orca/` stops a development plugin's worker: approval
   skips `.orca/`, as the docs say, but the check at worker start counts it, so the worker keeps
   failing with `content hash mismatch` and no new approval clears it. Both `orca plugin types`
   (`.orca/types`) and `orca plugin shot` run inside the folder (`.orca/shots`) write there.
